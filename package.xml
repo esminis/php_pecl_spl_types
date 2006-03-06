@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "../pear/package.dtd">
+<package>
+ <name>SPL Types</name>
+ <summary>Standard PHP Library, Types Addon</summary>
+ <maintainers>
+  <maintainer>
+   <user>helly</user>
+   <name>Marcus Boerger</name>
+   <email>helly@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+ <description>
+SPL Types is a collection of special typehandling classes.
+ </description>
+ <license>PHP</license>
+ <release>
+  <state>stable</state>
+  <version>0.1-dev</version>
+  <date>TBA</date>
+  <filelist>
+   <file role="src" name="config.m4"/>
+   <file role="src" name="php_spl_types.c"/>
+   <file role="src" name="php_spl_types.h"/>
+   <file role="src" name="spl_type.c"/>
+   <file role="src" name="spl_type.h"/>
+   <file role="doc" name="CREDITS"/>
+   <file role="test" name="tests/001.phpt"/>
+   <file role="test" name="tests/002.phpt"/>
+   <file role="test" name="tests/003.phpt"/>
+   <file role="test" name="tests/004.phpt"/>
+  </filelist>
+  <deps>
+   <dep type="php" rel="ge" version="5.1"/>
+  </deps>
+ </release>
+</package>
+<!--
+vim:et:ts=1:sw=1
+-->
