@@ -84,7 +84,11 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, sp
 	ALLOC_INIT_ZVAL(object->value);
 
 	if (zend_hash_find(&class_type->constants_table, "__default", sizeof("__default"), (void **) &def) == FAILURE) {
+#if PHP_MAJOR_VERSION < 6
+		php_error_docref(NULL TSRMLS_CC, E_COMPILE_ERROR, "Class constant %s::__default doesn not exist", class_type->name);
+#else
 		php_error_docref(NULL TSRMLS_CC, E_COMPILE_ERROR, "Class constant %v::__default doesn not exist", class_type->name);
+#endif
 		return retval;
 	}
 
@@ -279,7 +283,50 @@ SPL_METHOD(SplType, __construct)
 }
 /* }}} */
 
-static zend_object_value spl_enum_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
+int spl_enum_apply_get_consts(zval **pzconst, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
+{
+	zval *val;
+	zval *return_value = va_arg(args, zval*);
+	long inc_def = va_arg(args, long);
+	zval **def = va_arg(args, zval**);
+
+	if (inc_def || pzconst != def) {
+		MAKE_STD_ZVAL(val);
+		ZVAL_ZVAL(val, *pzconst, 1, 0);
+#if PHP_MAJOR_VERSION < 6
+		add_assoc_zval(return_value, hash_key->arKey, val);
+#else
+		add_u_assoc_zval_ex(return_value, hash_key->type, hash_key->arKey, hash_key->nKeyLength, val);
+#endif
+	}
+
+	return ZEND_HASH_APPLY_KEEP;
+}
+/* }}} */
+
+/* {{{ proto array SplEnum::getConstList([bool inc_def = false])
+ Returns all consts (possible values) as an array. */
+SPL_METHOD(SplEnum, getConstList)
+{
+	zend_class_entry *ce = Z_OBJCE_P(getThis());
+	long inc_def = 0;
+	zval **def;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &inc_def) == FAILURE) {
+		return;
+	}
+	if (!inc_def) {
+		zend_hash_find(&ce->constants_table, "__default", sizeof("__default"), (void **) &def);
+	}
+
+	zend_update_class_constants(ce TSRMLS_CC);
+	array_init(return_value);
+
+	zend_hash_apply_with_arguments(&ce->constants_table, (apply_func_args_t)spl_enum_apply_get_consts, 3, return_value, inc_def, def);
+}
+/* }}} */
+
+static zend_object_value spl_type_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
 	return spl_type_object_new_ex(class_type, NULL, spl_type_set_enum TSRMLS_CC);
 }
@@ -296,9 +343,20 @@ static zend_function_entry spl_funcs_SplType[] = {
 	{NULL, NULL, NULL}
 };
 
+static zend_function_entry spl_funcs_SplEnum[] = {
+	SPL_ME(SplEnum, getConstList,  NULL, ZEND_ACC_PUBLIC)
+	{NULL, NULL, NULL}
+};
+
+static zend_object_value spl_enum_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
+{
+	return spl_type_object_new_ex(class_type, NULL, spl_type_set_enum TSRMLS_CC);
+}
+/* }}} */
+
 PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 {
-	REGISTER_SPL_STD_CLASS_EX(SplType, spl_enum_object_new, spl_funcs_SplType);
+	REGISTER_SPL_STD_CLASS_EX(SplType, spl_type_object_new, spl_funcs_SplType);
 	memcpy(&spl_handler_SplType, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	spl_handler_SplType.clone_obj      = spl_type_object_clone;
@@ -315,7 +373,7 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 
 	spl_ce_SplType->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
 
-	REGISTER_SPL_SUB_CLASS_EX(SplEnum, SplType, spl_enum_object_new, NULL);
+	REGISTER_SPL_SUB_CLASS_EX(SplEnum, SplType, spl_enum_object_new, spl_funcs_SplEnum);
 	spl_ce_SplEnum->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
 
 	REGISTER_SPL_SUB_CLASS_EX(SplBool, SplEnum, spl_enum_object_new, NULL);
