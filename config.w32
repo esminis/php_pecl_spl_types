@@ -3,7 +3,7 @@
 
 ARG_ENABLE("spl_types", "SPL Types support", "yes");
 
-if (PHP_SPL != "no") {
+if (PHP_SPL_TYPES != "no") {
 	EXTENSION("spl_types", "php_spl_types.c spl_type.c");
 	AC_DEFINE('HAVE_SPL_TYPES', 1);
 	ADD_EXTENSION_DEP('spl_types', 'spl')
