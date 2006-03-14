@@ -24,10 +24,10 @@
 #include "php.h"
 #include "php_spl_types.h"
 
-extern SPL_TYPES_API zend_class_entry *spl_ce_SplType;
-extern SPL_TYPES_API zend_class_entry *spl_ce_SplEnum;
-extern SPL_TYPES_API zend_class_entry *spl_ce_SplBool;
-extern SPL_TYPES_API zend_class_entry *spl_ce_SplInt;
+PHPAPI zend_class_entry  *spl_ce_SplType;
+PHPAPI zend_class_entry  *spl_ce_SplEnum;
+PHPAPI zend_class_entry  *spl_ce_SplBool;
+PHPAPI zend_class_entry  *spl_ce_SplInt;
 
 PHP_MINIT_FUNCTION(spl_type);
 
