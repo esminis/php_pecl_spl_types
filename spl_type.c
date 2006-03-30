@@ -59,7 +59,7 @@ static void spl_type_object_free_storage(void *_object TSRMLS_DC) /* {{{ */
 }
 /* }}} */
 
-static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, spl_type_object **obj, spl_type_set_t set TSRMLS_DC)
+static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, spl_type_object **obj, spl_type_set_t set TSRMLS_DC) /* {{{ */
 {
 	zend_object_value retval;
 	spl_type_object *object;
@@ -98,7 +98,7 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, sp
 }
 /* }}} */
 
-static zend_object_value spl_type_object_clone(zval *zobject TSRMLS_DC)
+static zend_object_value spl_type_object_clone(zval *zobject TSRMLS_DC) /* {{{ */
 {
 	zend_object_value new_obj_val;
 	zend_object *old_object;
@@ -222,7 +222,7 @@ static zval* spl_type_object_get(zval *zobject TSRMLS_DC) /* {{{ */
 	value->refcount = 0;
 
 	return value;
-}
+} /* }}} */
 
 static HashTable* spl_type_object_get_properties(zval *zobject TSRMLS_DC) /* {{{ */
 {
@@ -338,15 +338,26 @@ static zend_object_value spl_int_object_new(zend_class_entry *class_type TSRMLS_
 }
 /* }}} */
 
+/* {{{ Method and class definitions */
+static ZEND_BEGIN_ARG_INFO_EX(arg_SplType___construct, 0, 0, 0)
+	ZEND_ARG_INFO(0, initial_value)
+	ZEND_ARG_INFO(0, strict)
+ZEND_END_ARG_INFO()
+
 static zend_function_entry spl_funcs_SplType[] = {
-	SPL_ME(SplType, __construct,   NULL, ZEND_ACC_PUBLIC)
+	SPL_ME(SplType, __construct,   arg_SplType___construct, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 
+static ZEND_BEGIN_ARG_INFO_EX(arg_SplEnum_getConstList, 0, 0, 0)
+	ZEND_ARG_INFO(0, include_default)
+ZEND_END_ARG_INFO()
+
 static zend_function_entry spl_funcs_SplEnum[] = {
-	SPL_ME(SplEnum, getConstList,  NULL, ZEND_ACC_PUBLIC)
+	SPL_ME(SplEnum, getConstList,  arg_SplEnum_getConstList, ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
+/* }}} */
 
 static zend_object_value spl_enum_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
