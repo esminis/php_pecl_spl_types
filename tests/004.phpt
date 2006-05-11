@@ -117,3 +117,48 @@ object(SplInt)#%d (1) {
 }
 0
 ===DONE===
+--UEXPECTF--
+==NEW==
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+==PASS==
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(1)
+}
+1
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+==STRING==
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+==FAIL==
+unicode(20) "Value not an integer"
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+===STRICT:1<2==
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+===STRICT:2>1==
+unicode(20) "Value not an integer"
+object(SplInt)#%d (1) {
+  ["__default"]=>
+  int(0)
+}
+0
+===DONE===

@@ -305,3 +305,140 @@ object(MyStrEnumEx)#%d (1) {
 }
 Foo
 ===DONE===
+--UEXPECTF--
+==INT==
+array(3) {
+  [u"one"]=>
+  int(1)
+  [u"two"]=>
+  int(2)
+  [u"__default"]=>
+  int(1)
+}
+==NEW==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(1)
+}
+1
+==ASSIGN==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(1)
+}
+1
+==CHANGE==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(2)
+}
+2
+==ADD==
+int(4)
+4
+==CONCAT==
+unicode(4) "Wee2"
+Wee2
+==CONV==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(2)
+}
+2
+==FAIL==
+unicode(35) "Value not a const in enum MyIntEnum"
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(2)
+}
+2
+==STR==
+array(3) {
+  [u"foo"]=>
+  unicode(3) "Foo"
+  [u"bar"]=>
+  unicode(3) "Bar"
+  [u"__default"]=>
+  unicode(3) "Foo"
+}
+==NEW==
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+==ASSIGN==
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+==CHANGE==
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Bar"
+}
+Bar
+==ADD==
+int(2)
+2
+==CONCAT==
+unicode(6) "WeeBar"
+WeeBar
+==FAIL==
+unicode(35) "Value not a const in enum MyStrEnum"
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Bar"
+}
+Bar
+==EXTEND==
+==STR==
+array(4) {
+  [u"bar"]=>
+  unicode(3) "Baz"
+  [u"bla"]=>
+  unicode(3) "Bla"
+  [u"__default"]=>
+  unicode(3) "def"
+  [u"foo"]=>
+  unicode(3) "Foo"
+}
+==NEW==
+object(MyStrEnumEx)#%d (1) {
+  ["__default"]=>
+  unicode(3) "def"
+}
+def
+==ASSIGN==
+object(MyStrEnumEx)#%d (1) {
+  ["__default"]=>
+  unicode(3) "def"
+}
+def
+==CHANGE==
+object(MyStrEnumEx)#%d (1) {
+  ["__default"]=>
+  unicode(3) "def"
+}
+def
+==ADD==
+int(3)
+3
+==CONCAT==
+unicode(6) "Bardef"
+Bardef
+==FAIL==
+unicode(37) "Value not a const in enum MyStrEnumEx"
+object(MyStrEnumEx)#%d (1) {
+  ["__default"]=>
+  unicode(3) "def"
+}
+def
+==ASSIGN==
+object(MyStrEnumEx)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+===DONE===

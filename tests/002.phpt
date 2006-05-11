@@ -133,3 +133,53 @@ object(MyStrEnum)#%d (1) {
 }
 Foo
 ===DONE===
+--UEXPECTF--
+==NEW==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(1)
+}
+1
+==PASS==
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(1)
+}
+1
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(2)
+}
+2
+==FAIL==
+unicode(35) "Value not a const in enum MyIntEnum"
+object(MyIntEnum)#%d (1) {
+  ["__default"]=>
+  int(2)
+}
+2
+==NEW==
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+==PASS==
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Bar"
+}
+Bar
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+==FAIL==
+unicode(35) "Value not a const in enum MyStrEnum"
+object(MyStrEnum)#%d (1) {
+  ["__default"]=>
+  unicode(3) "Foo"
+}
+Foo
+===DONE===
