@@ -244,7 +244,6 @@ static HashTable* spl_type_object_get_properties(zval *zobject TSRMLS_DC) /* {{{
 }
 /* }}} */
 
-#if MBO_0
 static int spl_type_object_cast(zval *zobject, zval *writeobj, int type TSRMLS_DC) /* {{{ */
 {
 	spl_type_object *object = (spl_type_object*)zend_object_store_get_object(zobject TSRMLS_CC);
@@ -254,7 +253,6 @@ static int spl_type_object_cast(zval *zobject, zval *writeobj, int type TSRMLS_D
 	return SUCCESS;
 }
 /* }}} */
-#endif
 
 /* {{{ proto void SplType::__construct(mixed initial_value [, bool strict])
  Cronstructs a enum with given value. */
