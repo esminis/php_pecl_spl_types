@@ -1,42 +1,57 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "../pear/package.dtd">
-<package>
- <name>SPL Types</name>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.7" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>SPL_Types</name>
+ <channel>pecl.php.net</channel>
  <summary>Standard PHP Library, Types Addon</summary>
- <maintainers>
-  <maintainer>
-   <user>helly</user>
+ <description>SPL Types is a collection of special typehandling classes.</description>
+ <lead>
    <name>Marcus Boerger</name>
+   <user>helly</user>
    <email>helly@php.net</email>
-   <role>lead</role>
-  </maintainer>
- </maintainers>
- <description>
-SPL Types is a collection of special typehandling classes.
- </description>
+   <active>yes</active>
+ </lead>
+ <date>2006-05-25</date>
+ <version>
+  <release>0.1</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
  <license>PHP</license>
- <release>
-  <state>stable</state>
-  <version>0.1</version>
-  <date>2006-05-25</date>
-  <filelist>
+ <notes>- Initial version</notes>
+ <contents>
+  <dir name="/">
    <file role="src" name="config.m4"/>
+   <file role="src" name="config.w32"/>
    <file role="src" name="php_spl_types.c"/>
    <file role="src" name="php_spl_types.h"/>
    <file role="src" name="spl_type.c"/>
    <file role="src" name="spl_type.h"/>
    <file role="doc" name="CREDITS"/>
-   <file role="test" name="tests/001.phpt"/>
-   <file role="test" name="tests/002.phpt"/>
-   <file role="test" name="tests/003.phpt"/>
-   <file role="test" name="tests/004.phpt"/>
-   <file role="test" name="tests/005.phpt"/>
-   <file role="test" name="tests/006.phpt"/>
-  </filelist>
-  <deps>
-   <dep type="php" rel="ge" version="5.1"/>
-  </deps>
- </release>
+   <dir name="/tests">
+    <file role="test" name="001.phpt"/>
+    <file role="test" name="002.phpt"/>
+    <file role="test" name="003.phpt"/>
+    <file role="test" name="004.phpt"/>
+    <file role="test" name="005.phpt"/>
+    <file role="test" name="006.phpt"/>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <providesextension>SPL_Types</providesextension>
+ <extsrcrelease/>
 </package>
 <!--
 vim:et:ts=1:sw=1
