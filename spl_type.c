@@ -244,7 +244,7 @@ static HashTable* spl_type_object_get_properties(zval *zobject TSRMLS_DC) /* {{{
 }
 /* }}} */
 
-#if (PHP_MAJOR_VERSION < 6) && (PHP_MINOR_VERSION < 2)
+#if (PHP_MAJOR_VERSION == 5) && (PHP_MINOR_VERSION < 2)
 #define convert_to_explicit_type(pzv, type)		\
     do {										\
 		switch (type) {							\
