@@ -244,6 +244,38 @@ static HashTable* spl_type_object_get_properties(zval *zobject TSRMLS_DC) /* {{{
 }
 /* }}} */
 
+#if (PHP_MAJOR_VERSION < 6) && (PHP_MINOR_VERSION < 2)
+#define convert_to_explicit_type(pzv, type)		\
+    do {										\
+		switch (type) {							\
+			case IS_NULL:						\
+				convert_to_null(pzv);			\
+				break;							\
+			case IS_LONG:						\
+				convert_to_long(pzv);			\
+				break;							\
+			case IS_DOUBLE: 					\
+				convert_to_double(pzv); 		\
+				break; 							\
+			case IS_BOOL: 						\
+				convert_to_boolean(pzv); 		\
+				break; 							\
+			case IS_ARRAY: 						\
+				convert_to_array(pzv); 			\
+				break; 							\
+			case IS_OBJECT: 					\
+				convert_to_object(pzv); 		\
+				break; 							\
+			case IS_STRING: 					\
+				convert_to_string(pzv); 		\
+				break; 							\
+			default: 							\
+				assert(0); 						\
+				break; 							\
+		}										\
+	} while (0);
+#endif
+
 static int spl_type_object_cast(zval *zobject, zval *writeobj, int type TSRMLS_DC) /* {{{ */
 {
 	spl_type_object *object = (spl_type_object*)zend_object_store_get_object(zobject TSRMLS_CC);

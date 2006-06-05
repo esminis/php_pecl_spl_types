@@ -1,7 +1,8 @@
 --TEST--
 SPL: SplEnum with strings and new parameter parsing api
 --SKIPIF--
-<?php if (!extension_loaded("spl_types")) print "skip"; ?>
+<?php if (!extension_loaded("spl_types")) die("skip"); ?>
+<?php if (version_compare(PHP_VERSION, "5.2", "<")) die("skip requires 5.2"); ?>
 --FILE--
 <?php
 
