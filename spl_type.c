@@ -173,7 +173,11 @@ static void spl_type_set_enum(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
 	}
 	
 	if (!inf->done) {
+#if PHP_MAJOR_VERSION < 6
+		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a const in enum %s", inf->object->std.ce->name);
+#else
 		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a const in enum %v", inf->object->std.ce->name);
+#endif
 	}
 }
 /* }}} */
@@ -200,7 +204,11 @@ static void spl_type_object_set(zval **pzobject, zval *value TSRMLS_DC) /* {{{ *
 	inf.done   = 0;
 
 	if (!inf.object->std.ce) {
+#if PHP_MAJOR_VERSION < 6
+		zend_throw_exception_ex(spl_ce_RuntimeException, 0 TSRMLS_CC, "Value of type %s was not initialized properly", Z_OBJCE_PP(pzobject)->name);
+#else
 		zend_throw_exception_ex(spl_ce_RuntimeException, 0 TSRMLS_CC, "Value of type %v was not initialized properly", Z_OBJCE_PP(pzobject)->name);
+#endif
 		return;
 	}
 	
