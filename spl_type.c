@@ -40,7 +40,7 @@
 #endif
 
 #ifndef Z_SET_REFCOUNT_P
-#define Z_SET_REFCOUNT_P(x, n) (x)->refcount = 0
+#define Z_SET_REFCOUNT_P(x, n) (x)->refcount = n
 #endif
 
 zend_object_handlers spl_handler_SplType;
