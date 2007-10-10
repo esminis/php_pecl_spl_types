@@ -227,7 +227,7 @@ static zval* spl_type_object_get(zval *zobject TSRMLS_DC) /* {{{ */
 	
 	MAKE_STD_ZVAL(value);
 	ZVAL_ZVAL(value, object->value, 1, 0);
-	value->refcount = 0;
+	Z_SET_REFCOUNT_P(value, 0);
 
 	return value;
 } /* }}} */
@@ -245,7 +245,7 @@ static HashTable* spl_type_object_get_properties(zval *zobject TSRMLS_DC) /* {{{
 	}
 	zend_hash_copy(object->properties_copy, object->std.properties, (copy_ctor_func_t) zval_add_ref, (void*)&tmp, sizeof(zval *));
 	
-	object->value->refcount++;
+	Z_ADDREF_P(object->value);
 	zend_hash_update(object->properties_copy, "__default", sizeof("__default"), (void*)&object->value, sizeof(zval *), (void**)&tmp);
 
 	return object->properties_copy;
