@@ -35,6 +35,14 @@
 #include "ext/spl/spl_exceptions.h"
 #include "spl_type.h"
 
+#ifndef Z_ADDREF_P
+#define Z_ADDREF_P(x) (x)->refcount++
+#endif
+
+#ifndef Z_SET_REFCOUNT_P
+#define Z_SET_REFCOUNT_P(x, n) (x)->refcount = 0
+#endif
+
 zend_object_handlers spl_handler_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplEnum;
