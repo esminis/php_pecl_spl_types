@@ -48,6 +48,7 @@ SPL_TYPES_API zend_class_entry  *spl_ce_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplEnum;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplBool;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplInt;
+SPL_TYPES_API zend_class_entry  *spl_ce_SplFloat;
 
 static void spl_type_object_free_storage(void *_object TSRMLS_DC) /* {{{ */
 {
@@ -67,7 +68,7 @@ static void spl_type_object_free_storage(void *_object TSRMLS_DC) /* {{{ */
 }
 /* }}} */
 
-static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, spl_type_object **obj, spl_type_set_t set TSRMLS_DC) /* {{{ */
+static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, zend_bool spl_type_strict, spl_type_object **obj, spl_type_set_t set TSRMLS_DC) /* {{{ */
 {
 	zend_object_value retval;
 	spl_type_object *object;
@@ -77,6 +78,7 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, sp
 	memset(object, 0, sizeof(spl_type_object));
 	object->std.ce = class_type;
 	object->set = set;
+	object->strict = spl_type_strict;
 	/* object->strict = 0; done by set 0 */
 	if (obj) *obj = object;
 
@@ -118,7 +120,7 @@ static zend_object_value spl_type_object_clone(zval *zobject TSRMLS_DC) /* {{{ *
 	old_object = zend_objects_get_address(zobject TSRMLS_CC);
 	source = (spl_type_object*)old_object;
 
-	new_obj_val = spl_type_object_new_ex(old_object->ce, &object, source->set TSRMLS_CC);
+	new_obj_val = spl_type_object_new_ex(old_object->ce, source->strict, &object, source->set TSRMLS_CC);
 	new_object = &object->std;
 
 	zend_objects_clone_members(new_object, new_obj_val, old_object, handle TSRMLS_CC);
@@ -198,6 +200,19 @@ static void spl_type_set_int(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
 		zval_dtor(inf->object->value);
 		ZVAL_ZVAL(inf->object->value, inf->value, 1, 0);
 		convert_to_long_ex(&inf->object->value);
+		inf->done = 1;
+	}
+}
+/* }}} */
+
+static void spl_type_set_float(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
+{
+	if (inf->object->strict && (Z_TYPE_P(inf->value) != IS_DOUBLE && Z_TYPE_P(inf->value) != IS_LONG)) {
+		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a float");
+	} else {
+		zval_dtor(inf->object->value);
+		ZVAL_ZVAL(inf->object->value, inf->value, 1, 0);
+		convert_to_double_ex(&inf->object->value);
 		inf->done = 1;
 	}
 }
@@ -309,18 +324,16 @@ SPL_METHOD(SplType, __construct)
 	zval *zobject = getThis();
 	zval *value = NULL;
 	spl_type_object *object;
-	zend_bool strict = 0;
 
 	object = (spl_type_object*)zend_object_store_get_object(zobject TSRMLS_CC);
 
 	php_set_error_handling(EH_THROW, spl_ce_InvalidArgumentException TSRMLS_CC);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zb", &value, &strict) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|zb", &value, &object->strict) == FAILURE) {
 		php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 		return;
 	}
 
-	object->strict = strict;
 	if (ZEND_NUM_ARGS()) {
 		spl_type_object_set(&zobject, value TSRMLS_CC);
 	}
@@ -374,16 +387,20 @@ SPL_METHOD(SplEnum, getConstList)
 
 static zend_object_value spl_type_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
-	return spl_type_object_new_ex(class_type, NULL, spl_type_set_enum TSRMLS_CC);
+	return spl_type_object_new_ex(class_type, 0, NULL, spl_type_set_enum TSRMLS_CC);
 }
 /* }}} */
 
 static zend_object_value spl_int_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
-	return spl_type_object_new_ex(class_type, NULL, spl_type_set_int TSRMLS_CC);
+	return spl_type_object_new_ex(class_type, 1, NULL, spl_type_set_int TSRMLS_CC);
 }
 /* }}} */
 
+static zend_object_value spl_float_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
+{
+	return spl_type_object_new_ex(class_type, 1, NULL, spl_type_set_float TSRMLS_CC);
+}
 /* {{{ Method and class definitions */
 static ZEND_BEGIN_ARG_INFO_EX(arg_SplType___construct, 0, 0, 0)
 	ZEND_ARG_INFO(0, initial_value)
@@ -407,7 +424,7 @@ static zend_function_entry spl_funcs_SplEnum[] = {
 
 static zend_object_value spl_enum_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
-	return spl_type_object_new_ex(class_type, NULL, spl_type_set_enum TSRMLS_CC);
+	return spl_type_object_new_ex(class_type, 0, NULL, spl_type_set_enum TSRMLS_CC);
 }
 /* }}} */
 
@@ -440,6 +457,9 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 
 	REGISTER_SPL_SUB_CLASS_EX(SplInt, SplType, spl_int_object_new, NULL);
 	zend_declare_class_constant_long(spl_ce_SplInt, "__default", sizeof("__default") - 1, 0 TSRMLS_CC);
+
+	REGISTER_SPL_SUB_CLASS_EX(SplFloat, SplType, spl_float_object_new, NULL);
+	zend_declare_class_constant_double(spl_ce_SplFloat, "__default", sizeof("__default") - 1, 0 TSRMLS_CC);
 
 	return SUCCESS;
 }
