@@ -10,6 +10,12 @@
    <email>helly@php.net</email>
    <active>yes</active>
  </lead>
+ <lead>
+   <name>David Coallier</name>
+   <user>davidc</user>
+   <email>davidc@php.net</email>
+   <active>yes</active>
+ </lead>
  <date>2006-06-05</date>
  <version>
   <release>0.2</release>
