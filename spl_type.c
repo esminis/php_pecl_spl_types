@@ -440,6 +440,11 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 #if MBO_0
 	spl_handler_SplType.cast_object    = spl_type_object_cast;
 #else
+	/**
+	 * This is going to be removed and put to spl_type_object_cast soon.
+	 * @FIXME
+	 * @todo Make sure the custom casting is working well
+	 */
 	spl_handler_SplType.cast_object    = NULL;
 #endif
 	
