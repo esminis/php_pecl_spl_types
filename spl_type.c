@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 5                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2006 The PHP Group                                |
+   | Copyright (c) 1997-2008 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -445,7 +445,7 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 	 * @FIXME
 	 * @todo Make sure the custom casting is working well
 	 */
-	spl_handler_SplType.cast_object    = NULL;
+	spl_handler_SplType.cast_object    = spl_type_object_cast;
 #endif
 	
 	zend_declare_class_constant_null(spl_ce_SplType, "__default", sizeof("__default") - 1 TSRMLS_CC);
