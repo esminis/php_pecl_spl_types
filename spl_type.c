@@ -79,7 +79,6 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, ze
 	object->std.ce = class_type;
 	object->set = set;
 	object->strict = spl_type_strict;
-	/* object->strict = 0; done by set 0 */
 	if (obj) *obj = object;
 
 	ALLOC_HASHTABLE(object->std.properties);
@@ -103,7 +102,7 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, ze
 	}
 
 	ZVAL_ZVAL(object->value, *def, 1, 0);
-
+	
 	return retval;
 }
 /* }}} */
@@ -126,7 +125,6 @@ static zend_object_value spl_type_object_clone(zval *zobject TSRMLS_DC) /* {{{ *
 	zend_objects_clone_members(new_object, new_obj_val, old_object, handle TSRMLS_CC);
 	
 	ZVAL_ZVAL(object->value, source->value, 1, 0);
-	object->strict = source->strict;
 
 	return new_obj_val;
 }
@@ -321,11 +319,10 @@ static int spl_type_object_cast(zval *zobject, zval *writeobj, int type TSRMLS_D
  Cronstructs a enum with given value. */
 SPL_METHOD(SplType, __construct)
 {
-	zval *zobject = getThis();
 	zval *value = NULL;
 	spl_type_object *object;
 
-	object = (spl_type_object*)zend_object_store_get_object(zobject TSRMLS_CC);
+	object = (spl_type_object*)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	php_set_error_handling(EH_THROW, spl_ce_InvalidArgumentException TSRMLS_CC);
 
@@ -335,7 +332,7 @@ SPL_METHOD(SplType, __construct)
 	}
 
 	if (ZEND_NUM_ARGS()) {
-		spl_type_object_set(&zobject, value TSRMLS_CC);
+		spl_type_object_set(&getThis(), value TSRMLS_CC);
 	}
 
 	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
@@ -437,16 +434,12 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 	spl_handler_SplType.get            = spl_type_object_get;
 	spl_handler_SplType.set            = spl_type_object_set;
 	spl_handler_SplType.get_properties = spl_type_object_get_properties;
-#if MBO_0
-	spl_handler_SplType.cast_object    = spl_type_object_cast;
-#else
 	/**
 	 * This is going to be removed and put to spl_type_object_cast soon.
 	 * @FIXME
 	 * @todo Make sure the custom casting is working well
 	 */
 	spl_handler_SplType.cast_object    = spl_type_object_cast;
-#endif
 	
 	zend_declare_class_constant_null(spl_ce_SplType, "__default", sizeof("__default") - 1 TSRMLS_CC);
 
