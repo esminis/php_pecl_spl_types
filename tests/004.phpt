@@ -44,30 +44,30 @@ var_dump($e2);
 echo "$e2\n";
 
 echo "===STRICT:1<2==\n"; // not getting strict
-$e1 = new SplInt(0, true);
+$e3 = new SplInt(0, false);
 try
 {
-	$e1 = "xyz";
+	$e3 = "xyz";
 }
 catch(UnexpectedValueException $err)
 {
 	var_dump($err->getMessage());
 }
-var_dump($e1);
-echo "$e1\n";
+var_dump($e3);
+echo "$e3\n";
 
 echo "===STRICT:2>1==\n"; // staying strict
-$e2 = new SplInt(0, false);
+$e4 = new SplInt(0, true);
 try
 {
-	$e2 = "xyz";
+	$e4 = "xyz";
 }
 catch(UnexpectedValueException $err)
 {
 	var_dump($err->getMessage());
 }
-var_dump($e2);
-echo "$e2\n";
+var_dump($e4);
+echo "$e4\n";
 
 ?>
 ===DONE===
@@ -91,6 +91,7 @@ object(SplInt)#%d (1) {
 }
 0
 ==STRING==
+string(20) "Value not an integer"
 object(SplInt)#%d (1) {
   ["__default"]=>
   int(0)
@@ -136,6 +137,7 @@ object(SplInt)#%d (1) {
 }
 0
 ==STRING==
+unicode(20) "Value not an integer"
 object(SplInt)#%d (1) {
   ["__default"]=>
   int(0)
