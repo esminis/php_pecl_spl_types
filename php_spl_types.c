@@ -61,10 +61,21 @@ zend_module_entry spl_types_module_entry = { /* {{{ */
 	NULL,
 	NULL,
 	NULL,
-	NULL,
-	"0.1",
+	PHP_MINFO(spl_types),
+	PHP_SPL_TYPES_VERSION,
 	STANDARD_MODULE_PROPERTIES
 };
+/* }}} */
+
+/* {{{ PHP_MINFO(spl_types)
+ */
+PHP_MINFO_FUNCTION(spl_types)
+{
+	php_info_print_table_start();
+	php_info_print_table_header(2, "SPL Types support", "enabled");
+	php_info_print_table_row(2, "Version", PHP_SPL_TYPES_VERSION);
+	php_info_print_table_end();
+}
 /* }}} */
 
 /*

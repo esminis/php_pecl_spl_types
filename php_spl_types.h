@@ -25,6 +25,10 @@
 extern zend_module_entry spl_types_module_entry;
 #define phpext_spl_types_ptr &spl_types_module_entry
 
+#define PHP_SPL_TYPES_VERSION "0.4.0-dev"
+
+PHP_MINFO_FUNCTION(spl_types);
+
 #ifdef PHP_WIN32
 # ifdef SPL_TYPES_EXPORTS
 #  define SPL_TYPES_API __declspec(dllexport)
