@@ -399,7 +399,7 @@ static zend_object_value spl_float_object_new(zend_class_entry *class_type TSRML
 	return spl_type_object_new_ex(class_type, 1, NULL, spl_type_set_float TSRMLS_CC);
 }
 /* {{{ Method and class definitions */
-static ZEND_BEGIN_ARG_INFO_EX(arg_SplType___construct, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arg_SplType___construct, 0, 0, 0)
 	ZEND_ARG_INFO(0, initial_value)
 	ZEND_ARG_INFO(0, strict)
 ZEND_END_ARG_INFO()
@@ -409,7 +409,7 @@ static zend_function_entry spl_funcs_SplType[] = {
 	{NULL, NULL, NULL}
 };
 
-static ZEND_BEGIN_ARG_INFO_EX(arg_SplEnum_getConstList, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arg_SplEnum_getConstList, 0, 0, 0)
 	ZEND_ARG_INFO(0, include_default)
 ZEND_END_ARG_INFO()
 
