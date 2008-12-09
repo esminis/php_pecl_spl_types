@@ -43,6 +43,12 @@
 #define Z_SET_REFCOUNT_P(x, n) (x)->refcount = n
 #endif
 
+#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 2) || PHP_MAJOR_VERSION > 5
+# define SPL_TYPES_CALLABLE TSRMLS_CC
+#else
+# define SPL_TYPES_CALLABLE
+#endif
+
 zend_object_handlers spl_handler_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplEnum;
@@ -378,7 +384,7 @@ SPL_METHOD(SplEnum, getConstList)
 	zend_update_class_constants(ce TSRMLS_CC);
 	array_init(return_value);
 
-	zend_hash_apply_with_arguments(&ce->constants_table, (apply_func_args_t)spl_enum_apply_get_consts, 3, return_value, inc_def, def);
+	zend_hash_apply_with_arguments(&ce->constants_table SPL_TYPES_CALLABLE, (apply_func_args_t)spl_enum_apply_get_consts, 3, return_value, inc_def, def);
 }
 /* }}} */
 
