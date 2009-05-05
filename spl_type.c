@@ -55,6 +55,7 @@ SPL_TYPES_API zend_class_entry  *spl_ce_SplEnum;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplBool;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplInt;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplFloat;
+SPL_TYPES_API zend_class_entry  *spl_ce_SplString;
 
 static void spl_type_object_free_storage(void *_object TSRMLS_DC) /* {{{ */
 {
@@ -204,6 +205,19 @@ static void spl_type_set_int(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
 		zval_dtor(inf->object->value);
 		ZVAL_ZVAL(inf->object->value, inf->value, 1, 0);
 		convert_to_long_ex(&inf->object->value);
+		inf->done = 1;
+	}
+}
+/* }}} */
+
+static void spl_type_set_string(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
+{
+	if (inf->object->strict && (Z_TYPE_P(inf->value) != IS_STRING)) {
+		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a string");
+	} else {
+		zval_dtor(inf->object->value);
+		ZVAL_ZVAL(inf->object->value, inf->value, 1, 0);
+		convert_to_string_ex(&inf->object->value);
 		inf->done = 1;
 	}
 }
@@ -403,6 +417,12 @@ static zend_object_value spl_int_object_new(zend_class_entry *class_type TSRMLS_
 static zend_object_value spl_float_object_new(zend_class_entry *class_type TSRMLS_DC) /* {{{ */
 {
 	return spl_type_object_new_ex(class_type, 1, NULL, spl_type_set_float TSRMLS_CC);
+} 
+/* }}} */
+
+static zend_object_value spl_string_object_new(zend_class_entry *class_type TSRMLS_DC)
+{
+    return spl_type_object_new_ex(class_type, 1, NULL, spl_type_set_string TSRMLS_CC);
 }
 /* {{{ Method and class definitions */
 ZEND_BEGIN_ARG_INFO_EX(arg_SplType___construct, 0, 0, 0)
@@ -464,6 +484,9 @@ PHP_MINIT_FUNCTION(spl_type) /* {{{ */
 
 	REGISTER_SPL_SUB_CLASS_EX(SplFloat, SplType, spl_float_object_new, NULL);
 	zend_declare_class_constant_double(spl_ce_SplFloat, "__default", sizeof("__default") - 1, 0 TSRMLS_CC);
+
+    REGISTER_SPL_SUB_CLASS_EX(SplString, SplType, spl_string_object_new, NULL);
+    zend_declare_class_constant_string(spl_ce_SplString, "__default", sizeof("__default") - 1, "" TSRMLS_CC);
 
 	return SUCCESS;
 }
