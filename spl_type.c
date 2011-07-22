@@ -90,7 +90,7 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, ze
 
 	ALLOC_HASHTABLE(object->std.properties);
 	zend_hash_init(object->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
-#if PHP_VERSION_ID > 50300
+#if PHP_VERSION_ID >= 50400
 	object_properties_init(&object->std, class_type);
 #else
 	zend_hash_copy(object->std.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref, (void *) &tmp, sizeof(zval *));
