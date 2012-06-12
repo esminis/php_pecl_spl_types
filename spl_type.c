@@ -250,6 +250,11 @@ static void spl_type_object_set(zval **pzobject, zval *value TSRMLS_DC) /* {{{ *
 	}
 
 	inf.object->set(&inf TSRMLS_CC);
+	
+	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJ_HANDLER_P(value, get)) {
+		zval_dtor(inf.value);
+		FREE_ZVAL(inf.value);
+	}
 }
 /* }}} */
 
