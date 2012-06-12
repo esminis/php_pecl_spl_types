@@ -104,11 +104,7 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, ze
 	ALLOC_INIT_ZVAL(object->value);
 
 	if (zend_hash_find(&class_type->constants_table, "__default", sizeof("__default"), (void **) &def) == FAILURE) {
-#if PHP_MAJOR_VERSION < 6
 		php_error_docref(NULL TSRMLS_CC, E_COMPILE_ERROR, "Class constant %s::__default doesn not exist", class_type->name);
-#else
-		php_error_docref(NULL TSRMLS_CC, E_COMPILE_ERROR, "Class constant %v::__default doesn not exist", class_type->name);
-#endif
 		return retval;
 	}
 
@@ -192,11 +188,7 @@ static void spl_type_set_enum(spl_type_set_info *inf TSRMLS_DC) /* {{{ */
 	}
 	
 	if (!inf->done) {
-#if PHP_MAJOR_VERSION < 6
 		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a const in enum %s", inf->object->std.ce->name);
-#else
-		zend_throw_exception_ex(spl_ce_UnexpectedValueException, 0 TSRMLS_CC, "Value not a const in enum %v", inf->object->std.ce->name);
-#endif
 	}
 }
 /* }}} */
@@ -249,11 +241,7 @@ static void spl_type_object_set(zval **pzobject, zval *value TSRMLS_DC) /* {{{ *
 	inf.done   = 0;
 
 	if (!inf.object->std.ce) {
-#if PHP_MAJOR_VERSION < 6
 		zend_throw_exception_ex(spl_ce_RuntimeException, 0 TSRMLS_CC, "Value of type %s was not initialized properly", Z_OBJCE_PP(pzobject)->name);
-#else
-		zend_throw_exception_ex(spl_ce_RuntimeException, 0 TSRMLS_CC, "Value of type %v was not initialized properly", Z_OBJCE_PP(pzobject)->name);
-#endif
 		return;
 	}
 	
@@ -373,11 +361,7 @@ int spl_enum_apply_get_consts(zval **pzconst, int num_args, va_list args, zend_h
 	if (inc_def || pzconst != def) {
 		MAKE_STD_ZVAL(val);
 		ZVAL_ZVAL(val, *pzconst, 1, 0);
-#if PHP_MAJOR_VERSION < 6
 		add_assoc_zval(return_value, hash_key->arKey, val);
-#else
-		add_u_assoc_zval_ex(return_value, hash_key->type, hash_key->arKey, hash_key->nKeyLength, val);
-#endif
 	}
 
 	return ZEND_HASH_APPLY_KEEP;
