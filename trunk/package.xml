@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.7" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>SPL_Types</name>
+ <channel>pecl.php.net</channel>
+ <summary>Standard PHP Library, Types Addon</summary>
+ <description>SPL Types is a collection of special typehandling classes.</description>
+ <lead>
+   <name>Marcus Boerger</name>
+   <user>helly</user>
+   <email>helly@php.net</email>
+   <active>yes</active>
+ </lead>
+ <lead>
+   <name>David Coallier</name>
+   <user>davidc</user>
+   <email>davidc@php.net</email>
+   <active>yes</active>
+ </lead>
+ <date>2012-06-12</date>
+ <version>
+  <release>0.4.0</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license>PHP</license>
+ <notes>
+  - Support for PHP 5.4+
+  - Fixed memory leak when assigning an object
+  - Fixed crash when using SplBool::getConstList() on PHP 5.3+
+ </notes>
+ 
+ <contents>
+  <dir name="/">
+   <file role="src" name="config.m4"/>
+   <file role="src" name="config.w32"/>
+   <file role="src" name="php_spl_types.c"/>
+   <file role="src" name="php_spl_types.h"/>
+   <file role="src" name="spl_type.c"/>
+   <file role="src" name="spl_type.h"/>
+   <file role="doc" name="CREDITS"/>
+   <dir name="tests">
+    <file role="test" name="001.phpt"/>
+    <file role="test" name="002.phpt"/>
+    <file role="test" name="003.phpt"/>
+    <file role="test" name="004.phpt"/>
+    <file role="test" name="005.phpt"/>
+    <file role="test" name="006.phpt"/>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <providesextension>SPL_Types</providesextension>
+ <extsrcrelease/>
+ <changelog>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2008-01-13</date>
+   <license>PHP</license>
+   <notes>
+  - Support for 5.3
+  - Added new type (SplFloat)
+  - Support for OSX
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-05-25</date>
+   <license>PHP</license>
+   <notes>- Initial version</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-05-25</date>
+   <license>PHP</license>
+   <notes>- Initial version</notes>
+  </release>
+ </changelog>
+</package>
+<!--
+vim:et:ts=1:sw=1
+-->

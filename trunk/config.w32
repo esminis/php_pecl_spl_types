@@ -1,0 +1,10 @@
+// $Id$
+// vim:ft=javascript
+
+ARG_ENABLE("spl_types", "SPL Types support", "no");
+
+if (PHP_SPL_TYPES != "no") {
+	EXTENSION("spl_types", "php_spl_types.c spl_type.c");
+	AC_DEFINE('HAVE_SPL_TYPES', 1);
+	ADD_EXTENSION_DEP('spl_types', 'spl')
+}
