@@ -44,8 +44,10 @@
 #endif
 
 #if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 2) || PHP_MAJOR_VERSION > 5
+# define SPL_TYPES_CALLABLE_DC TSRMLS_DC
 # define SPL_TYPES_CALLABLE TSRMLS_CC
 #else
+# define SPL_TYPES_CALLABLE_DC
 # define SPL_TYPES_CALLABLE
 #endif
 
@@ -356,7 +358,7 @@ SPL_METHOD(SplType, __construct)
 }
 /* }}} */
 
-int spl_enum_apply_get_consts(zval **pzconst, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
+int spl_enum_apply_get_consts(zval **pzconst SPL_TYPES_CALLABLE_DC, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
 {
 	zval *val;
 	zval *return_value = va_arg(args, zval*);
