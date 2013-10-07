@@ -81,7 +81,10 @@ static zend_object_value spl_type_object_new_ex(zend_class_entry *class_type, ze
 {
 	zend_object_value retval;
 	spl_type_object *object;
-	zval *tmp, **def;
+#if PHP_VERSION_ID < 50400
+	zval *tmp
+#endif
+	zval **def;
 
 	object = emalloc(sizeof(spl_type_object));
 	memset(object, 0, sizeof(spl_type_object));
