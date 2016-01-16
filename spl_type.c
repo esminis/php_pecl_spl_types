@@ -104,7 +104,12 @@ static zend_object* spl_type_object_new_ex(zend_class_entry *class_type, zend_bo
 		return &object->std;
 	}
 
-	ZVAL_ZVAL(object->value, zend_hash_str_find(&class_type->constants_table, NAME_DEFAULT_PROPERTY, strlen(NAME_DEFAULT_PROPERTY)), 1, 0);
+    zval* temp = zend_hash_str_find(&class_type->constants_table, NAME_DEFAULT_PROPERTY, strlen(NAME_DEFAULT_PROPERTY));
+    if (temp == NULL) {
+        ZVAL_NULL(object->value);
+    } else {
+        ZVAL_ZVAL(object->value, (zval*)Z_PTR_P(temp), 1, 0);
+	}
 
 	return &object->std;
 }
@@ -239,27 +244,25 @@ static void spl_type_object_set(zval* pzobject, zval* value TSRMLS_DC) /* {{{ */
 		return;
 	}
 
+    zval temp;
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJ_HANDLER_P(value, get)) {
-        zval* temp = emalloc(sizeof(zval));
-        ZVAL_NULL(temp);
-		inf.value = inf.object->std.handlers->get(value TSRMLS_CC, temp);
+		inf.value = inf.object->std.handlers->get(value TSRMLS_CC, &temp);
 	}
 
 	inf.object->set(&inf TSRMLS_CC);
 
+	if (Z_REFCOUNTED_P(value)) {
+        zval_ptr_dtor(value);
+	}
 	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJ_HANDLER_P(value, get)) {
-		zval_dtor(inf.value);
+        zval_ptr_dtor(inf.value);
 	}
 }
 /* }}} */
 
 static zval* spl_type_object_get(zval *zobject TSRMLS_DC, zval *rv) /* {{{ */
 {
-	spl_type_object *object = Z_SPL_TYPE_OBJECT_P(zobject);
-
-	ZVAL_ZVAL(rv, object->value, 1, 0);
-	Z_SET_REFCOUNT_P(rv, 0);
-
+	ZVAL_ZVAL(rv, Z_SPL_TYPE_OBJECT_P(zobject)->value, 1, 0);
 	return rv;
 } /* }}} */
 
@@ -352,15 +355,14 @@ SPL_METHOD(SplType, __construct)
 
 int spl_enum_apply_get_consts(zval *pzconst SPL_TYPES_CALLABLE_DC, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
 {
-	zval *val;
+	zval val;
 	zval *return_value = va_arg(args, zval*);
 	long inc_def = va_arg(args, long);
 	zval *def = va_arg(args, zval**);
 
 	if (inc_def || pzconst != def) {
-		val = emalloc(sizeof(zval));
-		ZVAL_ZVAL(val, pzconst, 1, 0);
-		add_assoc_zval(return_value, ZSTR_VAL(hash_key->key), val);
+		ZVAL_ZVAL(&val, (zval*)Z_PTR_P(pzconst), 1, 0);
+		add_assoc_zval(return_value, ZSTR_VAL(hash_key->key), &val);
 	}
 
 	return ZEND_HASH_APPLY_KEEP;
