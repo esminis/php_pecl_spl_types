@@ -45,11 +45,11 @@ typedef struct _spl_type_set_info {
 typedef void (*spl_type_set_t)(spl_type_set_info *inf TSRMLS_DC);
 
 struct _spl_type_object {
-	zend_object        std;
 	zval               *value;
 	zend_bool          strict;
 	spl_type_set_t     set;
 	HashTable          *properties_copy;
+	zend_object        std;
 };
 
 #endif /* SPL_TYPE_H */
