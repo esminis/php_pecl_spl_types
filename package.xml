@@ -18,7 +18,7 @@
  </lead>
  <date>2016-01-16</date>
  <version>
-  <release>0.5.0</release>
+  <release>0.5.1</release>
   <api>1.0</api>
  </version>
  <stability>
@@ -64,7 +64,7 @@
  <changelog>
   <release>
    <version>
-    <release>0.5.0</release>
+    <release>0.5.1</release>
     <api>1.0</api>
    </version>
    <stability>
@@ -73,9 +73,7 @@
    </stability>
    <date>2016-01-16</date>
    <license>PHP</license>
-   <notes>
-  - Support for PHP7
-   </notes>
+   <notes>Support for PHP7</notes>
   </release>
   <release>
    <version>
