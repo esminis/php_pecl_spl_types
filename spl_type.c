@@ -43,14 +43,6 @@
 #define Z_SET_REFCOUNT_P(x, n) (x)->refcount = n
 #endif
 
-#if (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION > 2) || PHP_MAJOR_VERSION > 5
-# define SPL_TYPES_CALLABLE_DC TSRMLS_DC
-# define SPL_TYPES_CALLABLE TSRMLS_CC
-#else
-# define SPL_TYPES_CALLABLE_DC
-# define SPL_TYPES_CALLABLE
-#endif
-
 zend_object_handlers spl_handler_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplType;
 SPL_TYPES_API zend_class_entry  *spl_ce_SplEnum;
@@ -108,7 +100,7 @@ static zend_object* spl_type_object_new_ex(zend_class_entry *class_type, zend_bo
     if (temp == NULL) {
         ZVAL_NULL(object->value);
     } else {
-        ZVAL_ZVAL(object->value, (zval*)Z_PTR_P(temp), 1, 0);
+        ZVAL_ZVAL(object->value, temp, 1, 0);
 	}
 
 	return &object->std;
@@ -353,7 +345,7 @@ SPL_METHOD(SplType, __construct)
 }
 /* }}} */
 
-int spl_enum_apply_get_consts(zval *pzconst SPL_TYPES_CALLABLE_DC, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
+int spl_enum_apply_get_consts(zval *pzconst, int num_args, va_list args, zend_hash_key *hash_key) /* {{{ */
 {
 	zval val;
 	zval *return_value = va_arg(args, zval*);
@@ -361,7 +353,7 @@ int spl_enum_apply_get_consts(zval *pzconst SPL_TYPES_CALLABLE_DC, int num_args,
 	zval *def = va_arg(args, zval**);
 
 	if (inc_def || pzconst != def) {
-		ZVAL_ZVAL(&val, (zval*)Z_PTR_P(pzconst), 1, 0);
+		ZVAL_ZVAL(&val, pzconst, 1, 0);
 		add_assoc_zval(return_value, ZSTR_VAL(hash_key->key), &val);
 	}
 
@@ -387,7 +379,7 @@ SPL_METHOD(SplEnum, getConstList)
 	zend_update_class_constants(ce TSRMLS_CC);
 	array_init(return_value);
 
-	zend_hash_apply_with_arguments(&ce->constants_table SPL_TYPES_CALLABLE, spl_enum_apply_get_consts, 3, return_value, inc_def, def);
+	zend_hash_apply_with_arguments(&ce->constants_table, spl_enum_apply_get_consts, 3, return_value, inc_def, def);
 }
 /* }}} */
 

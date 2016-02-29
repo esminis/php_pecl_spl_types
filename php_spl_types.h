@@ -25,7 +25,7 @@
 extern zend_module_entry spl_types_module_entry;
 #define phpext_spl_types_ptr &spl_types_module_entry
 
-#define PHP_SPL_TYPES_VERSION "0.5.1"
+#define PHP_SPL_TYPES_VERSION "0.5.2"
 
 PHP_MINFO_FUNCTION(spl_types);
 
