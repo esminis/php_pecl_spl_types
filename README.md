@@ -1,9 +1,9 @@
 # PHP 7 SPL_Types
 
-Original rewrite by @esminis.
+SPL_Type support for PHP 7.
 
 # Install
 
 ```
-pecl install https://github.com/igorsantos07/SPL_Types/archive/0.5.2.tar.gz
+pecl install https://github.com/esminis/php_pecl_spl_types/archive/RELEASE_0_5_3.zip
 ```
