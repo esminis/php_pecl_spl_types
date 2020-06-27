@@ -1,6 +1,6 @@
 # PHP 7 SPL_Types
 
-SPL_Type support for PHP 7.
+SPL_Types support for PHP 7
 
 # Install
 
